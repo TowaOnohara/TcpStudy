@@ -25,8 +25,8 @@
             <RowDefinition Height="160*"/>
             <RowDefinition Height="17*"/>
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="2" TextWrapping="Wrap" Text="{Binding Path=TargetIP, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"/>
-        <TextBox Grid.Column="2" Grid.Row="2" TextWrapping="Wrap" Text="{Binding Path=port, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Row="2" TextWrapping="Wrap" Text="{Binding Path=LocalIP, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"/>
+        <TextBox Grid.Column="2" Grid.Row="2" TextWrapping="Wrap" Text="{Binding Path=LocalPort, UpdateSourceTrigger=PropertyChanged}"/>
         <Button Content="Start"  Command="{Binding Path=StartServerCommand}" Grid.Column="4" Grid.Row="2"/>
         <RichTextBox Grid.ColumnSpan="6" VerticalScrollBarVisibility="Auto" IsReadOnly="True" Grid.Row="6" Grid.Column="1">
             <i:Interaction.Triggers>

@@ -31,7 +31,16 @@ namespace TcpStudy_Client
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new MainViewMode();
+            // 起動モードの取得
+            if (null != Environment.GetCommandLineArgs().FirstOrDefault(s => { return (s.Substring(0, 3) == "udp"); }))
+            {
+                this.DataContext = new UdpViewModel();
+            }
+            else
+            {
+                this.DataContext = new MainViewMode();
+            }
+
         }
     }
 
@@ -40,8 +49,8 @@ namespace TcpStudy_Client
     {
         private TcpClient client = null;
         private StreamWriter writer = null;
-        public int port { get; set; }
-        public string TargetIP { get; set; }
+        public int ServerPort { get; set; }
+        public string ServerIP { get; set; }
         private string _sendedText;
         public string Sendedtext
         {
@@ -126,8 +135,8 @@ namespace TcpStudy_Client
 
         public MainViewMode()
         {
-            port = 9999;                // Serverが待機しているIP
-            TargetIP = "127.0.0.1";     // ServerのIPアドレス
+            ServerPort = 9999;                // Serverが待機しているIP
+            ServerIP = "127.0.0.1";     // ServerのIPアドレス
         }
 
 
@@ -135,7 +144,7 @@ namespace TcpStudy_Client
         {
             try
             {
-                client = new TcpClient(this.TargetIP, this.port);
+                client = new TcpClient(this.ServerIP, this.ServerPort);   // 相手のIP、相手のPort
                 writer = new StreamWriter(client.GetStream());
             }
             catch (Exception e) 

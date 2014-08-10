@@ -32,7 +32,15 @@ namespace TcpStudy
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new MainViewMode();
+            // 起動モードの取得
+            if (null != Environment.GetCommandLineArgs().FirstOrDefault(s => { return (s.Substring(0, 3) == "udp"); }))
+            {
+                this.DataContext = new UdpViewModel();
+            }
+            else
+            {
+                this.DataContext = new MainViewMode();
+            }
         }
     }
 
@@ -41,8 +49,8 @@ namespace TcpStudy
     {
 		private TcpListener listener = null;
         private Thread ServerThread = null;
-        public int port { get; set; }
-        public string TargetIP { get; set; }
+        public int LocalPort { get; set; }
+        public string LocalIP { get; set; }
         private string _recvText;
         public string Recvtext 
         {
@@ -104,15 +112,15 @@ namespace TcpStudy
 
         public MainViewMode() 
         {
-            port = 9999;
-            TargetIP = "127.0.0.1";
+            LocalPort = 9999;
+            LocalIP = "127.0.0.1";
         }
 
 
         private void StartServer(object obj)
         {
             // 待機処理開始
-            listener = new TcpListener(IPAddress.Parse(TargetIP), port);
+            listener = new TcpListener(IPAddress.Parse(LocalIP), LocalPort);    // 自分のIP、自分のPort
             listener.Start();
 
             // サーバスレッドで待機する。

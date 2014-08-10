@@ -16,10 +16,10 @@ namespace TcpStudy
 {
     public class UdpViewModel : ViewModelBase
     {
-		private TcpListener listener = null;
         private Thread ServerThread = null;
-        public int port { get; set; }
-        public string TargetIP { get; set; }
+        public int LocalPort { get; set; }
+        public string LocalIP { get; set; }
+        System.Text.Encoding enc = System.Text.Encoding.UTF8; //文字コードを指定する
         private string _recvText;
         public string Recvtext 
         {
@@ -49,7 +49,7 @@ namespace TcpStudy
             get 
             {
                 if (_startServerCommand != null) { return _startServerCommand; }
-                _startServerCommand = new DelegateCommand(this.StartServer, m => { return (listener == null); });
+                _startServerCommand = new DelegateCommand(this.StartServer, m => { return (ServerThread == null); });
                 return _startServerCommand;
             }
         }
@@ -60,18 +60,13 @@ namespace TcpStudy
             get 
             {
                 if (_stopServerCommand != null) { return _stopServerCommand; }
-                _stopServerCommand = new DelegateCommand(this.StopServer, m => { return (listener != null); });
+                _stopServerCommand = new DelegateCommand(this.StopServer, m => { return (ServerThread != null); });
                 return _stopServerCommand;
             }
         }
 
         private void StopServer(object obj)
         {
-            if (listener != null)
-            {
-                listener.Stop();
-                listener = null;
-            }
             if (ServerThread != null) 
             {
                 ServerThread.Abort();
@@ -81,17 +76,13 @@ namespace TcpStudy
 
         public UdpViewModel() 
         {
-            port = 9999;
-            TargetIP = "127.0.0.1";
+            LocalPort = 9999;
+            LocalIP = "";           // 使わない
         }
 
 
         private void StartServer(object obj)
         {
-            // 待機処理開始
-            //listener = new TcpListener(IPAddress.Parse(TargetIP), port);
-            //listener.Start();
-
             // サーバスレッドで待機する。
             ServerThread = new Thread(new ParameterizedThreadStart(this.ServerListener));
             ServerThread.Start();
@@ -101,28 +92,21 @@ namespace TcpStudy
         {
             try
             {
+                // 待機処理開始
+                UdpClient server = new UdpClient(LocalPort);  // 自分のポート番号
+
                 while (true)
                 {
-                    TcpClient server = listener.AcceptTcpClient();
-                    Trace.WriteLine("accept");
+                    System.Net.IPEndPoint remoteEP = null;
+                    byte[] rcvBytes = server.Receive(ref remoteEP);
+                    string sr = enc.GetString(rcvBytes);
+                    Recvtext += (DateTime.Now.ToString("[HH:mm:ss] ") + sr);
+                    Recvtext += "\n";
+                    Trace.WriteLine("get string:" + sr);
+
                     ClientInfo = string.Format("Connect to [{0}:{1}]",
-                        ((System.Net.IPEndPoint)server.Client.RemoteEndPoint).Address.ToString(),
-                        ((System.Net.IPEndPoint)server.Client.RemoteEndPoint).Port.ToString());
-
-                    NetworkStream sterm = server.GetStream();
-                    StreamReader reader = new StreamReader(sterm);
-                    Trace.WriteLine("wait...");
-
-                    while (true)
-                    {
-                        string sr = reader.ReadLine();
-                        if (sr == "__CMD_ENDCONNECTION__") { break; }
-                        Recvtext += (DateTime.Now.ToString("[HH:mm:ss] ") + sr);
-                        Recvtext += "\n";
-                        Trace.WriteLine("get string:" + sr);
-                    }
-
-                    ClientInfo = "";
+                       remoteEP.Address.ToString(),
+                       remoteEP.Port.ToString());
                 }
             }
             catch (Exception ex) 

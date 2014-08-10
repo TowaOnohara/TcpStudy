@@ -21,6 +21,6 @@ D:\mine\prog\C#\WPF\TcpStudy\TcpStudy_Client\bin\Debug\zh-Hans\System.Windows.In
 D:\mine\prog\C#\WPF\TcpStudy\TcpStudy_Client\bin\Debug\zh-Hant\System.Windows.Interactivity.resources.dll
 D:\mine\prog\C#\WPF\TcpStudy\TcpStudy_Client\obj\Debug\TcpStudy_Client.exe
 D:\mine\prog\C#\WPF\TcpStudy\TcpStudy_Client\obj\Debug\TcpStudy_Client.pdb
-D:\mine\prog\C#\WPF\TcpStudy\TcpStudy_Client\obj\Debug\TcpStudy_Client.csprojResolveAssemblyReference.cache
 D:\mine\prog\C#\WPF\TcpStudy\TcpStudy_Client\obj\Debug\GeneratedInternalTypeHelper.g.cs
 D:\mine\prog\C#\WPF\TcpStudy\TcpStudy_Client\obj\Debug\TcpStudy_Client_MarkupCompile.lref
+D:\mine\prog\C#\WPF\TcpStudy\TcpStudy_Client\obj\Debug\TcpStudy_Client.csprojResolveAssemblyReference.cache
