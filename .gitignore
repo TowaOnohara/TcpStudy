@@ -36,7 +36,5 @@ Icon
 .Trashes
 
 # ignoer bin,obj
-TcpStudy/bin/
-TcpStudy/obj/
-TcpStudy_Client/bin/
-TcpStudy_Client/obj/
+bin/
+obj/
